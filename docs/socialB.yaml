@@ -1,0 +1,695 @@
+openapi: 3.0.3
+info:
+  title: SocialB
+  description: SocialB
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+    description: Local server
+paths:
+
+  /users/{username}:
+    get:
+      summary: Get user by username
+      operationId: getUserByUsername
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to retrieve
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+  /users:
+    get:
+      summary: Get all users
+      operationId: getAllUsers
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/without-followers:
+    get:
+      summary: Get all users without followers
+      operationId: getAllUsersWithoutFollowers
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/without-following:
+    get:
+      summary: Get all users without following anyone
+      operationId: getAllUsersWithoutFollowing
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{username}/friends:
+    get:
+      summary: Get all friends of a user
+      operationId: getFriendsOfUser
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to retrieve friends for
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{username}/followers:
+    get:
+      summary: Get all followers of a user
+      operationId: getFollowersOfUser
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to retrieve followers for
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{username}/following:
+    get:
+      summary: Get all users a user is following
+      operationId: getFollowingOfUser
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to retrieve following for
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/new:
+    post:
+      summary: Create a new user
+      operationId: createUser
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{username1}/follow/{username2}:
+    post:
+      summary: Follow a user
+      operationId: followUser
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: username1
+          schema:
+            type: string
+          required: true
+          description: Username of the user to follow
+        - in: path
+          name: username2
+          schema:
+            type: string
+          required: true
+          description: Username of the user to follow
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{username1}/unfollow/{username2}:
+    put:
+      summary: Unfollow a user
+      operationId: unfollowUser
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: username1
+          schema:
+            type: string
+          required: true
+          description: Username of the user to unfollow
+        - in: path
+          name: username2
+          schema:
+            type: string
+          required: true
+          description: Username of the user to unfollow
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /tags:
+    get:
+      summary: Get all tags
+      operationId: getAllTags
+      tags:
+        - tags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /tags/{name}:
+    get:
+      summary: Get tag by name
+      operationId: getTagByName
+      tags:
+        - tags
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: Name of the tag to retrieve
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /tags/{name}/find-or-create:
+    get:
+      summary: Find or create tag by name
+      operationId: findOrCreateTagByName
+      tags:
+        - tags
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: Name of the tag to retrieve
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /posts:
+    get:
+      summary: Get all posts
+      operationId: getAllPosts
+      tags:
+        - posts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+  /posts/{id}:
+    get:
+      summary: Get post by ID
+      operationId: getPostById
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to retrieve
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+    delete:
+      summary: Delete post by ID
+      operationId: deletePostById
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to delete
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /posts/{id}/count-likes:
+    get:
+      summary: Count likes of a post
+      operationId: countLikesOfPost
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to retrieve
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+
+  /posts/{username}/likes:
+    get:
+      summary: Get all posts liked by a user
+      operationId: getLikedPostsOfUser
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to retrieve liked posts for
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+  /posts/tag/{tag}:
+    get:
+      summary: Get all posts with a tag
+      operationId: getPostsByTag
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: tag
+          schema:
+            type: string
+          required: true
+          description: Tag to retrieve posts for
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+  /posts/{id}/likes/{username}:
+    get:
+      summary: Users like a post
+      operationId: userPostLikes
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to like
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to like the post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+    put:
+      summary: Like a post
+      operationId: likePost
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to unlike
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to unlike the post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /posts/{username}:
+    post:
+      summary: Create a post
+      operationId: createPost
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to create the post
+      requestBody:
+        description: Post object to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /posts/{id}/unlikes/{username}:
+    put:
+      summary: Unlike a post
+      operationId: unlikePost
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to unlike
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to unlike the post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /posts{id}/tags/{tag}/add:
+    put:
+      summary: Add a tag to a post
+      operationId: addTagToPost
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to add the tag to
+        - in: path
+          name: tag
+          schema:
+            type: string
+          required: true
+          description: Tag to add to the post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /posts{id}/tags/{tag}/remove:
+    put:
+      summary: Remove a tag to a post
+      operationId: removeTagToPost
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to add the tag to
+        - in: path
+          name: tag
+          schema:
+            type: string
+          required: true
+          description: Tag to add to the post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /posts/{id}/comments/{username}:
+    put:
+      summary: Add a comment to a post
+      operationId: addCommentToPost
+      tags:
+        - posts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: ID of the post to add the comment to
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: Username of the user to add the comment
+      requestBody:
+        description: Comment object to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+
+components:
+  schemas:
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      required:
+        - name
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        content:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+      required:
+        - content
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+      required:
+        - title
+        - content
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        likes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+      required:
+        - username
+        - email
+        - firstName
+        - lastName
+  

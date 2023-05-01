@@ -111,4 +111,8 @@ public class User {
 
     }
 
+    public void removeLikes(Post post){
+        this.likes.remove(post);
+    }
+
 }

@@ -13,7 +13,9 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 
     User findByUsernameOrEmail(String username, String email);
 
-    @Query("MATCH (u:User) WHERE NOT ()-[f:FOLLOWS]->(u) RETURN u")
+    User findByUsername(String username);
+
+    @Query("MATCH (u:User) WHERE NOT ()-[:FOLLOWS]->(u) RETURN u")
     List<User> findUserWithoutFollowers();
 
     @Query("MATCH (u:User) WHERE NOT (u)-[:FOLLOWS]->() RETURN u")
@@ -21,6 +23,17 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 
     @Query("MATCH (u:User)-[:FOLLOWS]->(f:User)-[:FOLLOWS]->(u) WHERE u.username = $username RETURN f")
     List<User> findFriendsByUserId(@Param("username") String username);
+
+    @Query("MATCH (u:User)-[:FOLLOWS]->(f:User) WHERE u.username = $username RETURN f")
+    List<User> findFollowingByUserId(@Param("username") String username);
+
+    @Query("MATCH (u:User)-[:FOLLOWS]->(f:User) WHERE u.username = $username RETURN f")
+    List<User> findFollowersByUserId(@Param("username") String username);
+
+    @Query("MATCH (u:User)-[r:FOLLOWS]->(f:User) WHERE u.username = $username AND f.username = $friend DELETE r RETURN u")
+    User removeUserFollow(@Param("username") String username, @Param("friend") String friend);
+
+
 
 
 }

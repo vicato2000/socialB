@@ -6,4 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "tag", path = "tag")
 public interface TagRepository extends Neo4jRepository<Tag, Long> {
+
+    public Tag findByName(String name);
+
 }

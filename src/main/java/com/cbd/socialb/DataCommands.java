@@ -412,4 +412,12 @@ public class DataCommands {
         }
 
     }
+
+    @ShellMethod("Delete all data")
+    public void deleteData() {
+        this.userRepository.deleteAll();
+        this.postRepository.deleteAll();
+        this.tagRepository.deleteAll();
+        this.commentRepository.deleteAll();
+    }
 }

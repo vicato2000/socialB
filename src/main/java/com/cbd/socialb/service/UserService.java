@@ -18,13 +18,18 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional(readOnly = true)
+    public User findByUsername(String username){
+        return this.userRepository.findByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
     public List<User> findAll(){
         return this.userRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     public List<String> findAllUsernames(){
-        return this.userRepository.findAll().stream().map(x -> x.getUsername()).toList();
+        return this.userRepository.findAll().stream().map(User::getUsername).toList();
     }
 
     @Transactional(readOnly = true)
@@ -52,6 +57,44 @@ public class UserService {
         List<User> users =  this.userRepository.findFriendsByUserId(username);
 
         return this.returnUsers(users);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> findFollowersByUsername(String username){
+        List<User> users =  this.userRepository.findFollowersByUserId(username);
+
+        return this.returnUsers(users);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> findFollowingByUsername(String username){
+        List<User> users =  this.userRepository.findFollowingByUserId(username);
+
+        return this.returnUsers(users);
+    }
+
+    @Transactional(readOnly = false)
+    public List<User> addFollow(String username1, String username2){
+        User user1 = this.userRepository.findByUsername(username1);
+        User user2 = this.userRepository.findByUsername(username2);
+
+        user1.addFollowing(user2);
+
+        user1 = this.userRepository.save(user1);
+
+        return this.findFriendsByUsername(user1.getUsername());
+    }
+
+    @Transactional(readOnly = false)
+    public User removeFollow(String username1, String username2){
+        User user1 = this.userRepository.findByUsername(username1);
+        User user2 = this.userRepository.findByUsername(username2);
+
+        if (user1 == null || user2 == null){
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "User not found");
+        }else{
+            return this.userRepository.removeUserFollow(user1.getUsername(), user2.getUsername());
+        }
     }
 
 
