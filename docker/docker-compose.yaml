@@ -9,15 +9,17 @@ services:
     volumes:
       - ./data:/data
     environment:
-      - NEO4J_AUTH=neo4j/admin
+      - NEO4J_AUTH=neo4j/password
   spring-boot:
-    build: ./Dockerfile
-    image: spring-boot:latest
+    build:
+      context: .
+      dockerfile: DockerFile
     container_name: spring-boot
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=bolt://neo4j:7687
+      - DB_URL=neo4j
+      - DB_PORT=7687
       - SPRING_DATASOURCE_USERNAME=neo4j
       - SPRING_DATASOURCE_PASSWORD=password
     depends_on:
